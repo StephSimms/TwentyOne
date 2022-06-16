@@ -21,6 +21,7 @@ namespace TwentyOne
             Dealer.Hand = new List<Card>();
             Dealer.Stay = false;
             Dealer.Deck = new Deck();
+            Dealer.Deck.Shuffle();
             Console.WriteLine("Place your bet!");
 
             foreach (Player player in Players)
@@ -53,7 +54,7 @@ namespace TwentyOne
                 }
                 Console.Write("Dealer: ");
                 Dealer.Deal(Dealer.Hand);
-                if (i == i)
+                if (i == 1)
                 {
                     bool blackJack = TwentyOneRules.CheckForBlackJack(Dealer.Hand);
                     if (blackJack)
@@ -63,6 +64,7 @@ namespace TwentyOne
                         {
                             Dealer.Balance += entry.Value;
                         }
+                        return;
                     }
                 }
             }
@@ -91,15 +93,17 @@ namespace TwentyOne
                     {
                         Dealer.Balance += Bets[player];
                         Console.WriteLine("{0} Busted! You lose your bet of {1}. Your balance is now {2}.", player.Name, Bets[player], player.Balance);
-                        Console.WriteLine("Do you want to bet again?");
+                        Console.WriteLine("Do you want to play again?");
                         answer = Console.ReadLine().ToLower();
                         if (answer == "yes" || answer == "yeah")
                         {
                             player.isActivelyPlaying = true;
+                            
                         }
                         else
                         {
                             player.isActivelyPlaying = false;
+                            
                         }
                     }
                 }
@@ -130,12 +134,12 @@ namespace TwentyOne
             }
             foreach (Player player in Players)
             {
-                bool? playerWon = TwentyOneRules.CompareHands(player.Hand, Dealer, Hand);
+                bool? playerWon = TwentyOneRules.CompareHands(player.Hand, Dealer.Hand);
                 if (playerWon == null)
                 {
                     Console.WriteLine("Push! No one wins.");
                     player.Balance += Bets[player];
-                    Bets.Remove(player);
+                    
                 }
                 else if (playerWon == true)
                 {
